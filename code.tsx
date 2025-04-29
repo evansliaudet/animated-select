@@ -19,7 +19,7 @@ type SelectOptionProps = {
   value: string;
   children: string;
   setValue?: Dispatch<SetStateAction<string>>;
-  setDisplayText?: Dispatch<SetStateAction<string>>;
+  handleSelection?: (text: string) => void;
   closeDropdown?: () => void;
 };
 
@@ -58,16 +58,19 @@ export function Select({
 
   const closeDropdown = () => setIsOpened(false);
 
+  // Handler for selection that updates both text and index
+  const handleSelection = (text: string, index: number) => {
+    setDisplayText(text);
+    setSelectedIndex(index);
+  };
+
   const childrenArray = Array.isArray(children) ? children : [children];
 
   const childrenWithProps = childrenArray.map((child, index) => {
     if (isValidElement<SelectOptionProps>(child)) {
       return cloneElement(child, {
         setValue,
-        setDisplayText: (text: string) => {
-          setDisplayText(() => text);
-          setSelectedIndex(index);
-        },
+        handleSelection: (text: string) => handleSelection(text, index),
         closeDropdown,
         key: child.props.value || index,
       });
@@ -151,7 +154,7 @@ export function SelectOption({
   children,
   value,
   setValue,
-  setDisplayText,
+  handleSelection,
   closeDropdown,
 }: SelectOptionProps) {
   return (
@@ -159,7 +162,7 @@ export function SelectOption({
       className="hover:bg-black/10 dark:hover:bg-white/10 p-2 px-5 rounded-xl cursor-pointer transition ease-in-out duration-200"
       onClick={() => {
         setValue?.(value);
-        setDisplayText?.(children);
+        handleSelection?.(children);
         closeDropdown?.();
       }}
     >
