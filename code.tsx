@@ -99,7 +99,7 @@ export function Select({
           </div>
 
           <div
-            className="absolute h-[1em] top-1/2 -translate-y-1/2 inset-0 flex flex-col gap-2 transition-transform duration-300 ease-in-out"
+            className="absolute h-full inset-0 flex flex-col gap-2 transition-transform duration-300 ease-in-out"
             style={{
               transform: `translateY(calc(${selectedIndex * -100}% - ${
                 selectedIndex * 8
